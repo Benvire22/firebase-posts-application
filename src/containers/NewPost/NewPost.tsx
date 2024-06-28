@@ -1,15 +1,22 @@
 import React, {useState} from 'react';
+import {useNavigate} from 'react-router-dom';
+import {PostApi} from '../../types';
 
 interface PostForm {
   title: string;
   description: string;
 }
 
-const NewPost = () => {
+interface Props {
+  onSubmit: (post: PostApi) => void;
+}
+
+const NewPost: React.FC<Props> = ({onSubmit}) => {
   const [formData, setFormData] = useState<PostForm>({
     title: '',
     description: '',
   });
+  const navigate = useNavigate();
 
   const changeForm = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData((prev) => ({
@@ -20,12 +27,29 @@ const NewPost = () => {
 
   const onFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(formData);
+
+    const date = new Date(Date.now()),
+      dFormat = [
+          date.getDate(),
+          (date.getMonth()+1 < 10 ? '0' + (date.getMonth()+1) : date.getMonth()+1),
+          date.getFullYear()].join('.') + ' ' +
+        [date.getHours(),
+          date.getMinutes(),
+          date.getSeconds()].join(':');
+
+    const newPost = {
+      title: formData.title,
+      description: formData.description,
+      datetime: dFormat,
+    };
+
+    onSubmit(newPost);
 
     setFormData({
       title: '',
       description: '',
     });
+    navigate('/');
   };
 
   return (

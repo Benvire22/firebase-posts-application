@@ -1,22 +1,43 @@
 import {NavLink, Route, Routes} from 'react-router-dom';
 import Home from './containers/Home/Home';
-import {useState} from 'react';
-import {Post} from './types';
+import {useCallback, useEffect, useState} from 'react';
+import {PostApi, Post} from './types';
 import NewPost from './containers/NewPost/NewPost';
+import axiosApi from './axiosApi';
+
+interface ApiPosts {
+  [key: string]: PostApi;
+}
 
 const App = () => {
   const [postsData, setPostsData] = useState<Post[]>([
-    {id: '1', datetime: Date.now(), title: 'Hello1'},
-    {id: '2', datetime: Date.now(), title: 'Hello2'},
-    {id: '3', datetime: Date.now(), title: 'Hello3'},
-    {id: '4', datetime: Date.now(), title: 'Hello4'},
   ]);
-  const [addPostForm, setAddPostForm] = useState(
-    {title: '', description: ''}
-  );
 
-  const postsRequest = async () => {
+  const getPostsApi = useCallback( async () => {
+    const {data} = await axiosApi.get<ApiPosts>('/posts.json');
+    console.log(data);
 
+    const arrayApiPosts: Post[]  = Object.keys(data).map((key) => {
+        return {
+          ...data[key],
+          id: key,
+        };
+    });
+
+    setPostsData(arrayApiPosts);
+  }, []);
+
+  useEffect(() => {
+    void getPostsApi();
+  }, [getPostsApi]);
+
+  const postsRequest = async (post: PostApi) => {
+    try {
+      await axiosApi.post('/posts.json', post);
+    } catch (e) {
+      const result = e as Error;
+      console.error(result.message);
+    }
   };
 
     return (
@@ -58,7 +79,7 @@ const App = () => {
           <main className="container-xl py-5">
             <Routes>
               <Route path="/" element={<Home posts={postsData} />} />
-              <Route path="/new-post" element={<NewPost />} />
+              <Route path="/new-post" element={<NewPost onSubmit={postsRequest} />} />
               <Route path="*" element={<h1 className="text-center my-5 text-danger">Sorry page not a found!</h1>} />
             </Routes>
           </main>

@@ -1,10 +1,12 @@
 export interface Post {
   id: string;
   title: string;
-  datetime: number;
+  datetime: string;
+  description: string;
 }
 
-export interface postApi {
+export interface PostApi {
   title: string;
-  datetime: number;
+  description: string;
+  datetime: string;
 }
