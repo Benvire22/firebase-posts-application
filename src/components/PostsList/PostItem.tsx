@@ -7,20 +7,11 @@ interface Props {
 }
 
 const PostItem: React.FC<Props> = ({heading, datetime, onClick}) => {
-  // const date = new Date(datetime),
-  //   dFormat = [
-  //       date.getDate(),
-  //       date.getMonth()+1,
-  //       date.getFullYear()].join('.') + ' ' +
-  //     [date.getHours(),
-  //       date.getMinutes(),
-  //       date.getSeconds()].join(':');
-
   return (
-    <div>
-      <span>Created on: {datetime}</span>
-      <h5>{heading}</h5>
-      <button type="button" onClick={onClick}>Read more {'>>'}</button>
+    <div className="border rounded mb-3 border-primary fs-5 py-3 px-3">
+      <span className="text-primary-emphasis">Created on: {datetime}</span>
+      <h5 className="text-warning fs-3 py-3">{heading}</h5>
+      <button type="button" className="btn btn-outline-primary fs-3" onClick={onClick}>Read more {'>>'}</button>
     </div>
   );
 };

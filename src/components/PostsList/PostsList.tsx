@@ -9,16 +9,19 @@ interface Props {
 
 const PostsList: React.FC<Props> = ({posts, onClick}) => {
   return (
-    <div>
-      {posts && posts.map((post) => (
-        <PostItem
-          key={post.id}
-          heading={post.title}
-          datetime={post.datetime}
-          onClick={() => onClick(post.id)}
-        />
-      ))}
-    </div>
+    <>
+      <h1 className="text-center mb-5">Posts</h1>
+      <div>
+        {posts && posts.map((post) => (
+          <PostItem
+            key={post.id}
+            heading={post.title}
+            datetime={post.datetime}
+            onClick={() => onClick(post.id)}
+          />
+        ))}
+      </div>
+    </>
   );
 };
 
