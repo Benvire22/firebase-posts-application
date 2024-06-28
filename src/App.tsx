@@ -6,6 +6,8 @@ import PostForm from './containers/PostForm/PostForm';
 import axiosApi from './axiosApi';
 import SinglePost from './containers/SinglePost/SinglePost';
 import ToolBar from './components/ToolBar/ToolBar';
+import About from './containers/About/About';
+import Contacts from './containers/Contacts/Contacts';
 
 interface ApiPosts {
   [key: string]: PostApi;
@@ -73,17 +75,19 @@ const App = () => {
       <header className="mb-5">
         <ToolBar />
       </header>
-      <main className="container-xl py-5 vh-100 border border-primary">
+      <main className="container-xl py-5  rounded  border border-primary">
         <Routes>
           <Route path="/" element={<Home posts={postsData} singlePost={getCurrentPost}/>}/>
           <Route path="/posts/:id" element={<SinglePost onEdit={onEdit} onDelete={removePost} post={currentPost}/>}/>
           <Route path="/posts/:id/edit"
                  element={<PostForm changePost={changePost} onSubmit={postsRequest} post={currentPost}/>}/>
           <Route path="/new-post" element={<PostForm changePost={changePost} onSubmit={postsRequest} post={null}/>}/>
+          <Route path="/about" element={<About />}/>
+          <Route path="/contacts" element={<Contacts />}/>
           <Route path="*" element={<h1 className="text-center my-5 text-danger">Sorry page not a found!</h1>}/>
         </Routes>
       </main>
-      <footer className="navbar navbar-expand-lg p-0 bg-warning">
+      <footer className="navbar navbar-expand-lg p-0 mt-5 bg-warning">
         <div className="container-xl text-white py-5 pb-4 d-flex justify-content-center flex-column align-items-center">
           <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet assumenda,
             debitis esse ex expedita laboriosam modi nihil officiis porro vero!</p>

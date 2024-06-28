@@ -81,32 +81,32 @@ const PostForm: React.FC<Props> = ({onSubmit, post, changePost}) => {
 
   return (
     <>
-      <div className="row mb-5">
-        <h1 className="text-warning text-center mb-5">{post ? 'Edit' : 'Create new'} post</h1>
+      <div className="row fs-3 mb-5">
+        <h1 className="text-primary-emphasis text-center mb-5">{post ? 'Edit' : 'Create new'} post</h1>
         <div className="row mt-2 justify-content-center">
           <div className="col-8">
             <form onSubmit={onFormSubmit}>
               <div className="form-group">
-                <label htmlFor="title">Title</label>
+                <label htmlFor="title" className="mb-3 text-primary-emphasis">Title</label>
                 <input
                   id="title" type="text" name="title"
-                  className="form-control mb-3 py-2"
+                  className="form-control fs-4 mb-3 py-2"
                   value={formData.title}
                   onChange={changeForm}
                   required
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="description">Description</label>
+                <label htmlFor="description" className="mb-3 text-primary-emphasis">Description</label>
                 <textarea
                   id="description" name="description"
-                  className="form-control mb-3 py-2"
+                  className="form-control fs-4 mb-3 py-2"
                   value={formData.description}
                   onChange={changeForm}
                   required
                 />
               </div>
-              <button type="submit" className="btn btn-warning text-white px-4 py-2 mb-5">
+              <button type="submit" className="btn btn-success fs-3 px-5 py-2 mb-5">
                 {post ? 'Save' : 'Send form'}
               </button>
             </form>

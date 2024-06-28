@@ -21,9 +21,9 @@ const Home: React.FC<Props> = ({posts, singlePost}) => {
   };
 
   return (
-    <div>
+    <>
       <PostsList posts={posts} onClick={readMorePost}/>
-    </div>
+    </>
   );
 };
 
