@@ -10,7 +10,7 @@ interface Props {
 const PostsList: React.FC<Props> = ({posts, onClick}) => {
   return (
     <div>
-      {posts.map((post) => (
+      {posts && posts.map((post) => (
         <PostItem
           key={post.id}
           heading={post.title}

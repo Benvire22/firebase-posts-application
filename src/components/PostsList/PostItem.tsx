@@ -2,7 +2,7 @@ import React from 'react';
 
 interface Props {
   heading: string
-  datetime: string
+  datetime: number
   onClick: () => void;
 }
 
