@@ -3,3 +3,8 @@ export interface Post {
   title: string;
   datetime: number;
 }
+
+export interface postApi {
+  title: string;
+  datetime: number;
+}

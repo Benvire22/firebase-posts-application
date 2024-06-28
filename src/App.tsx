@@ -2,6 +2,7 @@ import {NavLink, Route, Routes} from 'react-router-dom';
 import Home from './containers/Home/Home';
 import {useState} from 'react';
 import {Post} from './types';
+import NewPost from './containers/NewPost/NewPost';
 
 const App = () => {
   const [postsData, setPostsData] = useState<Post[]>([
@@ -10,6 +11,13 @@ const App = () => {
     {id: '3', datetime: Date.now(), title: 'Hello3'},
     {id: '4', datetime: Date.now(), title: 'Hello4'},
   ]);
+  const [addPostForm, setAddPostForm] = useState(
+    {title: '', description: ''}
+  );
+
+  const postsRequest = async () => {
+
+  };
 
     return (
         <>
@@ -50,6 +58,7 @@ const App = () => {
           <main className="container-xl py-5">
             <Routes>
               <Route path="/" element={<Home posts={postsData} />} />
+              <Route path="/new-post" element={<NewPost />} />
               <Route path="*" element={<h1 className="text-center my-5 text-danger">Sorry page not a found!</h1>} />
             </Routes>
           </main>
