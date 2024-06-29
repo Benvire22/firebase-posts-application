@@ -1,6 +1,7 @@
 import React from 'react';
 import PostItem from './PostItem';
 import {Post} from '../../types';
+import {Link} from 'react-router-dom';
 
 interface Props {
   posts: Post[];
@@ -11,7 +12,7 @@ const PostsList: React.FC<Props> = ({posts, onClick}) => {
   return (
     <>
       <h1 className="text-center text-primary-emphasis mb-5">Posts</h1>
-      <div className="border border-primary p-3 rounded">
+      <div className="px-3">
         {posts.length > 0 ? posts.map((post) => (
           <PostItem
             key={post.id}
@@ -19,7 +20,12 @@ const PostsList: React.FC<Props> = ({posts, onClick}) => {
             datetime={post.datetime}
             onClick={() => onClick(post.id)}
           />
-        )) : <h4 className="text-center fs-4 text-secondary-emphasis my-4">Empty..</h4>}
+        )) : (
+          <div className="d-flex flex-column">
+            <h4 className="text-center fs-4 text-secondary-emphasis my-4">Empty...</h4>
+            <Link to="/new-post" className="btn btn-success fs-4 px-4 mx-auto">Create post</Link>
+          </div>
+        )}
       </div>
     </>
   );

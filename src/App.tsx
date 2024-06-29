@@ -1,13 +1,16 @@
-import { Route, Routes, useNavigate} from 'react-router-dom';
-import Home from './containers/Home/Home';
 import {useCallback, useEffect, useState} from 'react';
-import {PostApi, Post} from './types';
-import PostForm from './containers/PostForm/PostForm';
+import {Route, Routes, useNavigate} from 'react-router-dom';
 import axiosApi from './axiosApi';
+import {PostApi, Post} from './types';
+import Home from './containers/Home/Home';
+import PostForm from './containers/PostForm/PostForm';
 import SinglePost from './containers/SinglePost/SinglePost';
 import ToolBar from './components/ToolBar/ToolBar';
 import About from './containers/About/About';
 import Contacts from './containers/Contacts/Contacts';
+import NotFound from './containers/NotFound/NotFound';
+import handleError from './lib/handleError';
+import './App.css';
 
 interface ApiPosts {
   [key: string]: PostApi;
@@ -16,21 +19,25 @@ interface ApiPosts {
 const App = () => {
   const [postsData, setPostsData] = useState<Post[]>([]);
   const [currentPost, setCurrentPost] = useState<Post | null>(null);
+  const [error, setError] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const getPostsApi = useCallback(async () => {
-    const {data} = await axiosApi.get<ApiPosts>('/posts.json');
-    console.log(data);
+    try {
+      const {data} = await axiosApi.get<ApiPosts>('/posts.json');
 
-    if (data !== null) {
-      const arrayApiPosts: Post[] = Object.keys(data).map((key) => {
-        return {
-          ...data[key],
-          id: key,
-        };
-      });
-
-      setPostsData(arrayApiPosts);
+      if (data !== null) {
+        const arrayApiPosts: Post[] = Object.keys(data).map((key) => {
+          return {
+            ...data[key],
+            id: key,
+          };
+        });
+        setPostsData(arrayApiPosts);
+      }
+    } catch (e) {
+      handleError(e as Error);
+      setError(true);
     }
   }, []);
 
@@ -42,8 +49,8 @@ const App = () => {
     try {
       await axiosApi.post('/posts.json', post);
     } catch (e) {
-      const result = e as Error;
-      console.error(result.message);
+      handleError(e as Error);
+      setError(true);
     }
   };
 
@@ -52,11 +59,14 @@ const App = () => {
   };
 
   const removePost = async (id: string) => {
-    await axiosApi.delete(`/posts/${id}.json`);
-    setPostsData((prevState) => {
-      return prevState.filter((post) => post.id !== id);
-    });
-    navigate('/');
+    try {
+      await axiosApi.delete(`/posts/${id}.json`);
+      setPostsData((prevState) => prevState.filter((post) => post.id !== id));
+      navigate('/');
+    } catch (e) {
+      handleError(e as Error);
+      setError(true);
+    }
   };
 
   const onEdit = (id: string) => {
@@ -73,18 +83,60 @@ const App = () => {
   return (
     <>
       <header className="mb-5">
-        <ToolBar />
+        <ToolBar/>
       </header>
-      <main className="container-xl py-5  rounded  border border-primary">
+      <main className="container-xl py-5 rounded border h-600 border-primary">
+        {error ? (
+          <h2 className="text-center fs-1 mb-5 text-danger">Sorry, unexpected Error was occurred!</h2>
+        ) : null}
         <Routes>
-          <Route path="/" element={<Home posts={postsData} singlePost={getCurrentPost}/>}/>
-          <Route path="/posts/:id" element={<SinglePost onEdit={onEdit} onDelete={removePost} post={currentPost}/>}/>
-          <Route path="/posts/:id/edit"
-                 element={<PostForm changePost={changePost} onSubmit={postsRequest} post={currentPost}/>}/>
-          <Route path="/new-post" element={<PostForm changePost={changePost} onSubmit={postsRequest} post={null}/>}/>
-          <Route path="/about" element={<About />}/>
-          <Route path="/contacts" element={<Contacts />}/>
-          <Route path="*" element={<h1 className="text-center my-5 text-danger">Sorry page not a found!</h1>}/>
+          <Route
+            path="/"
+            element={
+              <Home
+                posts={postsData}
+                getCurrentPost={getCurrentPost}
+              />
+            }/>
+          <Route
+            path="/posts/:id"
+            element={
+              <SinglePost
+                onEdit={onEdit}
+                onDelete={removePost}
+                post={currentPost}
+              />}
+          />
+          <Route
+            path="/posts/:id/edit"
+            element={
+              <PostForm
+                changePost={changePost}
+                onSubmit={postsRequest}
+                post={currentPost}
+                isError={setError}
+              />}
+          />
+          <Route
+            path="/new-post"
+            element={
+              <PostForm
+                changePost={changePost}
+                onSubmit={postsRequest}
+                post={null}
+              />}
+          />
+          <Route
+            path="/about"
+            element={<About/>}
+          />
+          <Route
+            path="/contacts"
+            element={<Contacts/>}
+          />
+          <Route
+            path="*"
+            element={<NotFound/>}/>
         </Routes>
       </main>
       <footer className="navbar navbar-expand-lg p-0 mt-5 bg-warning">

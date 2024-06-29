@@ -2,6 +2,8 @@ import React, {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {Post, PostApi} from '../../types';
 import axiosApi from '../../axiosApi';
+import getDateFormat from '../../lib/getDateFormat';
+import handleError from '../../lib/handleError';
 
 interface PostForm {
   title: string;
@@ -9,23 +11,13 @@ interface PostForm {
 }
 
 interface Props {
-  onSubmit: (post: PostApi) => void;
   post: Post | null;
+  onSubmit: (post: PostApi) => void;
   changePost: (currentPost: Post) => void;
+  isError?: (error: boolean) => void;
 }
 
-const currentDate = () => {
-  const date = new Date(Date.now());
-  return [
-      date.getDate(),
-      (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1),
-      date.getFullYear()].join('.') + ' ' +
-    [date.getHours(),
-      date.getMinutes(),
-      date.getSeconds()].join(':');
-};
-
-const PostForm: React.FC<Props> = ({onSubmit, post, changePost}) => {
+const PostForm: React.FC<Props> = ({onSubmit, post, changePost, isError}) => {
   const [formData, setFormData] = useState<PostForm>({
     title: post ? post.title : '',
     description: post ? post.description : '',
@@ -42,31 +34,31 @@ const PostForm: React.FC<Props> = ({onSubmit, post, changePost}) => {
   const onFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (post) {
-      const newPost: PostApi = {
-        datetime: post.datetime,
-        title: formData.title,
-        description: formData.description,
-      };
-      console.log(formData);
-
-      changePost({
-        ...post,
-        description: formData.description,
-        title: formData.title
-      });
-
+    if (post && isError) {
       try {
+        const newPost: PostApi = {
+          datetime: post.datetime,
+          title: formData.title,
+          description: formData.description,
+        };
+
+        changePost({
+          ...post,
+          description: formData.description,
+          title: formData.title
+        });
+
         await axiosApi.put(`/posts/${post.id}.json`, newPost);
       } catch (e) {
-        console.error(e);
+        handleError(e as Error);
+        isError(true);
       }
 
     } else {
       const newPost = {
         title: formData.title,
         description: formData.description,
-        datetime: currentDate(),
+        datetime: getDateFormat(Date.now()),
       };
 
       onSubmit(newPost);

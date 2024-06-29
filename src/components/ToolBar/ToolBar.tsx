@@ -1,12 +1,13 @@
 import {NavLink} from 'react-router-dom';
+import logo from '../../assets/logo.svg';
 
 const ToolBar = () => {
   return (
     <>
       <nav className="navbar py-3 navbar-expand-lg bg-primary" data-bs-theme="dark">
         <div className="container-xl">
-          <NavLink to="/" className="navbar-brand fs-1 fst-italic">
-            Logo
+          <NavLink to="/" className="navbar-brand">
+            <img src={logo} alt="logo" className="logo"/>
           </NavLink>
           <button
             className="navbar-toggler"

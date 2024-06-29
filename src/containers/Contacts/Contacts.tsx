@@ -42,7 +42,7 @@ const Contacts = () => {
           <li className="mb-2">Адрес: street, city, country</li>
         </ul>
       </div>
-      <div className="row mb-5 px-5 fs-5">
+      <div className="row px-5 fs-5">
         <h3 className="text-warning mb-5">Также вы можете оставить свою заявку:</h3>
         <div className="row mt-2 justify-content-center">
           <div className="col-8 text-primary-emphasis">
@@ -53,7 +53,7 @@ const Contacts = () => {
                   id="name"
                   type="text"
                   name="name"
-                  className="form-control fs-5 mb-3 py-2"
+                  className="form-control border-primary fs-5 mb-3 py-2"
                   value={formData.name}
                   onChange={changeUser}
                   required
@@ -65,7 +65,7 @@ const Contacts = () => {
                   id="email"
                   type="email"
                   name="email"
-                  className="form-control fs-5 mb-3 py-2"
+                  className="form-control border-primary fs-5 mb-3 py-2"
                   value={formData.email}
                   onChange={changeUser}
                   required
@@ -79,13 +79,13 @@ const Contacts = () => {
                   name="phone"
                   placeholder="(000)-222-111"
                   pattern="[0-9]{3}-[0-9]{3}-[0-9]{3}"
-                  className="form-control fs-5 mb-3 py-2"
+                  className="form-control border-primary fs-5 mb-4 py-2"
                   value={formData.phone}
                   onChange={changeUser}
                   required
                 />
               </div>
-              <button type="submit" className="btn btn-warning text-white fs-4 px-4 py-2 mb-5">
+              <button type="submit" className="btn btn-warning text-white fs-4 px-4 py-2 mb-3">
                 Отправить заявку
               </button>
             </form>

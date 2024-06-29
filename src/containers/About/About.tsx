@@ -30,8 +30,7 @@ const About = () => {
         </p>
       </div>
     </div>
-  )
-    ;
+  );
 };
 
 export default About;

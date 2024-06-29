@@ -5,10 +5,10 @@ import {useNavigate} from 'react-router-dom';
 
 interface Props {
   posts: Post[];
-  singlePost: (post: Post) => void;
+  getCurrentPost: (post: Post) => void;
 }
 
-const Home: React.FC<Props> = ({posts, singlePost}) => {
+const Home: React.FC<Props> = ({posts, getCurrentPost}) => {
   const navigate = useNavigate();
 
   const readMorePost = (id: string) => {
@@ -16,7 +16,7 @@ const Home: React.FC<Props> = ({posts, singlePost}) => {
 
     const post = posts.find((post) => post.id === id);
     if (post) {
-      singlePost(post);
+      getCurrentPost(post);
     }
   };
 
